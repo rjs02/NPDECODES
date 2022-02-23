@@ -19,7 +19,8 @@ Eigen::VectorXd dummyFunction(double x, int n) {
   std::cout << "NumPDESetup: student solution code" << std::endl;
   // This is not a meaningful solution
   // Please remove this line and put your code here!
-  return Eigen::Vector2d::Zero();
+  //return Eigen::Vector2d::Zero();
+  return Eigen::VectorXd::Constant(n, x);
 }
 /* SAM_LISTING_END_1 */
 
