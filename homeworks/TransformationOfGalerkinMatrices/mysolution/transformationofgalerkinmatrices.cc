@@ -39,6 +39,40 @@ std::vector<Eigen::Triplet<double>> transformCOOmatrix(
   //====================
   // Your code goes here
   //====================
+
+  // loop over all triplets
+  for(auto &triplet : A) {
+    int k = triplet.row()+1, l = triplet.col()+1; // add 1 to get math indexing
+    bool k_even = k % 2 == 0; // row index even?
+    bool l_even = l % 2 == 0; // col index even?
+
+    // case distinction, see solutions to 2-2.d); subtract 1 to get C++ indexing
+    if(k_even && l_even) {
+      A_t.emplace_back(Eigen::Triplet<double>(k/2-1,   l/2-1,    triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2+M-1, l/2+M-1,  triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2+M-1, l/2-1,   -triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2-1,   l/2+M-1, -triplet.value()));
+    }
+    else if(!k_even && !l_even) {
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2-1,   (l+1)/2-1,   triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2+M-1, (l+1)/2+M-1, triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2-1,   (l+1)/2+M-1, triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2+M-1, (l+1)/2-1,   triplet.value()));
+    }
+    else if(k_even && !l_even) {
+      A_t.emplace_back(Eigen::Triplet<double>(k/2-1,   (l+1)/2-1,    triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2-1,   (l+1)/2+M-1,  triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2+M-1, (l+1)/2+M-1, -triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>(k/2+M-1, (l+1)/2-1,   -triplet.value()));
+    }
+    else if(!k_even && l_even) {
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2-1,   l/2-1,    triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2+M-1, l/2+M-1, -triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2+M-1, l/2-1,    triplet.value()));
+      A_t.emplace_back(Eigen::Triplet<double>((k+1)/2-1,   l/2+M-1, -triplet.value()));
+    }
+  }
+  
   return A_t;
 }
 /* SAM_LISTING_END_1 */
