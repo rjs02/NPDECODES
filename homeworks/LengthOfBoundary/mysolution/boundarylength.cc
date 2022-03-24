@@ -21,7 +21,10 @@ double volumeOfDomain(const std::shared_ptr<lf::mesh::Mesh> mesh_p) {
   //====================
   // Your code goes here
   //====================
-
+  int codim = 0; // 0 = triangles (2D)
+  for(const auto *cell : mesh_p->Entities(codim)) {
+    volume += lf::geometry::Volume(*(cell->Geometry()));
+  }
   return volume;
 }
 /* SAM_LISTING_END_1 */
