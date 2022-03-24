@@ -36,6 +36,12 @@ double lengthOfBoundary(const std::shared_ptr<lf::mesh::Mesh> mesh_p) {
   // Your code goes here
   //====================
 
+  auto flagList = lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1); // flag edges on the boundary
+
+  for(const auto *edge : mesh_p->Entities(1)) { // iterate over all edges
+    if(flagList(*edge)) length += lf::geometry::Volume(*(edge->Geometry())); // add length (volume of edge) if edge is on boundary
+  }
+
   return length;
 }
 /* SAM_LISTING_END_2 */
