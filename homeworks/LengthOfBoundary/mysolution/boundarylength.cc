@@ -54,6 +54,14 @@ std::pair<double, double> measureDomain(std::string filename) {
   // Your code goes here
   //====================
 
+  // from Code 2.7.1.12
+  auto factory = std::make_unique<lf::mesh::hybrid2d::MeshFactory>(2);
+  lf::io::GmshReader reader(std::move(factory), filename);
+  std::shared_ptr<lf::mesh::Mesh> mesh_ptr = reader.mesh();
+
+  volume = volumeOfDomain(mesh_ptr);
+  length = lengthOfBoundary(mesh_ptr);
+
   return {volume, length};
 }
 /* SAM_LISTING_END_3 */
