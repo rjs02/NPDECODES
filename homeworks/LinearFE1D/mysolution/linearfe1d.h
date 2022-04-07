@@ -32,6 +32,30 @@ std::vector<Eigen::Triplet<double>> computeA(const Eigen::VectorXd &mesh,
   //====================
   // Your code goes here
   //====================
+  double hl = 0, hr = 0; // hl = cell width left from node i, hr = cell width right from node i
+  
+  
+  // compute entries for the second to second last rows of the 
+  for(unsigned i = 2; i < N; ++i) {
+    // if(i == 0) { // first row
+    //   hr = mesh(i+1) - mesh(i);
+    //   triplets.push_back(Eigen::Triplet<double>(i, i, 1/))
+    // }
+    hl = mesh(i) - mesh(i-1);
+    hr = mesh(i+1) - mesh(i);
+    triplets.push_back(Eigen::Triplet<double>(i, i, 1/hl + 1/hr));
+    triplets.push_back(Eigen::Triplet<double>(i, i-1, -1/hl));
+    triplets.push_back(Eigen::Triplet<double>(i, i+1, -1/hr));
+  }
+  // first row
+  hl = mesh(1) - mesh(0);
+  hr = mesh(2) - mesh(1);
+  triplets.push_back(Eigen::Triplet<double>(0, 0, 1/hl + 1/hr));
+  triplets.push_back(Eigen::Triplet<double>(0, 1, -1/hr));
+
+  // last row
+  hl = mesh(N) - mesh(N-1);
+  hr 
 
   return triplets;
 }  // computeA
